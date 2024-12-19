@@ -1,0 +1,30 @@
+---
+version: '3.7'
+services:
+  joplin-server:
+    image: etechonomy/joplin-server:latest
+    container_name: joplin-server
+    environment:
+        - APP_BASE_URL=http://joplin.yourdomain.tld
+        - APP_PORT=22300
+        - DB_CLIENT=pg
+        - POSTGRES_PASSWORD=joplin
+        - POSTGRES_DATABASE=joplin
+        - POSTGRES_USER=joplin 
+        - POSTGRES_PORT=5432 
+        - POSTGRES_HOST=joplin-db
+    restart: unless-stopped
+    ports:
+      - 22300:22300
+  joplin-db:
+    image: postgres:16 # latest as of 1/27/2024
+    container_name: joplin-db
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    volumes:
+      - /foo/bar/joplin-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=joplin
+      - POSTGRES_USER=joplin
+      - POSTGRES_DB=joplin
